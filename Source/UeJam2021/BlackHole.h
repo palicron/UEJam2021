@@ -25,6 +25,8 @@ protected:
 		class USphereComponent* InnerShpereComp;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 		class USphereComponent* LimitSphere;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+		class UBoxComponent* DestroyBox;
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -32,6 +34,8 @@ protected:
 		void OverlapInnerSphere(UPrimitiveComponent* OverlappedComponent, AActor* otherActor, UPrimitiveComponent* OtherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult);
 	UFUNCTION(BlueprintCallable)
 		void PullDynamicObjets();
+
+	int interationIndex = 0;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -47,6 +51,25 @@ public:
 		float Forceplayer = 150000.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bh_Porpertes")
 		float EventMultiply = 2.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bh_Porpertes")
+		FVector BoxInitStend = FVector(400.f);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bh_Porpertes")
+		float DestroiIntervasle = 5.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bh_Porpertes")
+		uint8 Iterations = 3;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bh_Porpertes")
+		FVector BoxIncresePerIteration = FVector(200.f);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bh_Porpertes")
+		float intervalesVariance = 1;
+	FTimerHandle FlootDentroiTimer;
+
+
+	UFUNCTION(BlueprintCallable)
+		void DestroiTiles();
+
+	
 	
 
 };
+
+

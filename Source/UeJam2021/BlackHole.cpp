@@ -1,10 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Components/SphereComponent.h"
-
+#include "Components/BoxComponent.h"
+#include "TimerManager.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "UeJam2021Character.h"
 #include "BlackHole.h"
+
+#include "Tile.h"
 
 // Sets default values
 ABlackHole::ABlackHole()
@@ -25,12 +28,19 @@ ABlackHole::ABlackHole()
 	LimitSphere = CreateDefaultSubobject<USphereComponent>(TEXT("LimitOFforceSphere"));
 	LimitSphere->SetSphereRadius(pullRadius);
 	LimitSphere->SetupAttachment(MeshComp);
+
+	DestroyBox = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxLimits"));
+	DestroyBox->SetBoxExtent(FVector(1.f));
+	DestroyBox->SetupAttachment(MeshComp);
+	DestroyBox->SetRelativeLocation(FVector(BoxInitStend.X/2, BoxInitStend.Y/2, BoxInitStend.Z/2));
 }
 
 // Called when the game starts or when spawned
 void ABlackHole::BeginPlay()
 {
 	Super::BeginPlay();
+	DestroyBox->SetBoxExtent(BoxInitStend);
+	GetWorldTimerManager().SetTimer(FlootDentroiTimer, this, &ABlackHole::DestroiTiles, DestroiIntervasle);
 	
 }
 
@@ -109,3 +119,34 @@ void ABlackHole::Tick(float DeltaTime)
 	PullDynamicObjets();
 }
 
+inline void ABlackHole::DestroiTiles()
+{
+	TArray<AActor*> tilesActors;
+	DestroyBox->GetOverlappingActors(tilesActors);
+	UE_LOG(LogTemp, Warning, TEXT("Some warning message"));
+	for (int32 i = 0;i < tilesActors.Num();i++)
+	{
+		ATile* CurrenTile = Cast<ATile>(tilesActors[i]);
+		if(CurrenTile)
+		{
+			CurrenTile->GravityEvent();
+		}
+	}
+
+	if(interationIndex< Iterations)
+	{
+		interationIndex++;
+		GetWorldTimerManager().ClearTimer(FlootDentroiTimer);
+		DestroiIntervasle *= intervalesVariance;
+		BoxInitStend += BoxIncresePerIteration;
+		DestroyBox->SetBoxExtent(BoxInitStend );
+		GetWorldTimerManager().SetTimer(FlootDentroiTimer, this, &ABlackHole::DestroiTiles, DestroiIntervasle);
+	
+	}
+	else
+	{
+		GetWorldTimerManager().ClearTimer(FlootDentroiTimer);
+	}
+	
+	
+}
