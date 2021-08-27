@@ -5,9 +5,8 @@
 #include "TimerManager.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "UeJam2021Character.h"
-#include "BlackHole.h"
-
 #include "Tile.h"
+#include "BlackHole.h"
 
 // Sets default values
 ABlackHole::ABlackHole()
