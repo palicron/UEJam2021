@@ -32,7 +32,7 @@ ABlackHole::ABlackHole()
 	DestroyBox = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxLimits"));
 	DestroyBox->SetBoxExtent(FVector(1.f));
 	DestroyBox->SetupAttachment(MeshComp);
-	DestroyBox->SetRelativeLocation(FVector(BoxInitStend.X/2, BoxInitStend.Y/2, BoxInitStend.Z/2));
+	DestroyBox->SetRelativeLocation(FVector::ZeroVector);
 }
 
 // Called when the game starts or when spawned

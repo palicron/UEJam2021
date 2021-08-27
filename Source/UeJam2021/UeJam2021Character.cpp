@@ -150,7 +150,7 @@ void AUeJam2021Character::AddPushDownForce()
 {
 	if (!isGrounded && !bIsJumping)
 	{
-		GetCharacterMovement()->AddForce(GetActorUpVector() * -300000.f);
+		GetCharacterMovement()->AddForce(GetActorUpVector() * -250000.f);
 	}
 
 

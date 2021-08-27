@@ -48,7 +48,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bh_Porpertes")
 		float Force = 125000.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bh_Porpertes")
-		float Forceplayer = 150000.0f;
+		float Forceplayer = 2500;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bh_Porpertes")
 		float EventMultiply = 2.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bh_Porpertes")

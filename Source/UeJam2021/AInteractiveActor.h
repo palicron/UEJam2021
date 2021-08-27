@@ -37,6 +37,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Objet Config")
 		bool bCanBeLaunch = false;
 	
+	virtual void Tick(float DeltaSeconds) override;
 	UFUNCTION(BlueprintCallable,Category="Interactive Object")
 	virtual void OnGrab();
 	UFUNCTION(BlueprintCallable, Category = "Interactive Object")
