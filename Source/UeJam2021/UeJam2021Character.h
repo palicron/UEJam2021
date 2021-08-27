@@ -45,7 +45,16 @@ protected:
 	void ResetDash();
 
 	void CheckGround();
-	
+
+	virtual void Jump() override;
+
+	virtual void StopJumping() override;;
+
+	void AddPushDownForce();
+
+	void CheckMaxPressJump(float DeltaTime);
+
+	float  JumpHoldTime = 0;
 
 public:
 
@@ -55,5 +64,7 @@ public:
 	bool isGrounded = false;
 
 	bool canDash = true;
+
+	bool bIsJumping = false;
 };
 

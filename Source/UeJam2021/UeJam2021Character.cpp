@@ -41,8 +41,8 @@ void AUeJam2021Character::SetupPlayerInputComponent(class UInputComponent* Playe
 {
 	// Set up gameplay key bindings
 	check(PlayerInputComponent);
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AUeJam2021Character::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AUeJam2021Character::StopJumping);
 
 	PlayerInputComponent->BindAction("Dash", IE_Pressed, this, &AUeJam2021Character::MakeDash);
 
@@ -56,7 +56,8 @@ void AUeJam2021Character::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	CheckGround();
-	
+	AddPushDownForce();
+	CheckMaxPressJump(DeltaSeconds);
 	
 }
 
@@ -98,21 +99,51 @@ void AUeJam2021Character::CheckGround()
 
 	FCollisionQueryParams CollParams;
 
-	bool ground = GetWorld()->LineTraceSingleByChannel(hit, Star, End, ECC_Visibility, CollParams);
+	isGrounded = GetWorld()->LineTraceSingleByChannel(hit, Star, End, ECC_Visibility, CollParams);
 
-	if(ground)
-	{
-		isGrounded = true;
-	}
-	else
-	{
-		isGrounded = false;
-	}
-
-	
 	//DrawDebugLine(GetWorld(),Star,End,FColor::Red,false,1,0,1);
 	
 	
+}
+
+void AUeJam2021Character::Jump()
+{
+	Super::Jump();
+	bIsJumping = true;
+}
+
+void AUeJam2021Character::StopJumping()
+{
+	Super::StopJumping();
+	bIsJumping = false;
+	JumpHoldTime = 0;
+}
+
+
+
+void AUeJam2021Character::AddPushDownForce()
+{
+	if(!isGrounded && !bIsJumping)
+	{
+		GetCharacterMovement()->AddForce(GetActorUpVector() * -300000.f);
+	}
+		
+	
+	
+}
+
+void AUeJam2021Character::CheckMaxPressJump(float DeltaTime)
+{
+	if (bIsJumping)
+	{
+		JumpHoldTime += DeltaTime;
+
+	
+		if (JumpHoldTime >= GetJumpMaxHoldTime())
+		{
+			bIsJumping = false;
+		}
+	}
 }
 
 
