@@ -7,6 +7,7 @@
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
+#include "MyBlueprintFunctionLibrary.h"
 #include "GameFramework/SpringArmComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
@@ -57,9 +58,13 @@ void AUeJam2021Character::SetupPlayerInputComponent(class UInputComponent* Playe
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
+	PlayerInputComponent->BindAction("Dash", IE_Pressed, this, &AUeJam2021Character::MakeDash);
+
 	PlayerInputComponent->BindAxis("MoveForward", this, &AUeJam2021Character::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AUeJam2021Character::MoveRight);
 
+
+	
 	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
 	// "turn" handles devices that provide an absolute delta, such as a mouse.
 	// "turnrate" is for devices that we choose to treat as a rate of change, such as an analog joystick
@@ -68,35 +73,25 @@ void AUeJam2021Character::SetupPlayerInputComponent(class UInputComponent* Playe
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AUeJam2021Character::LookUpAtRate);
 
-	// handle touch devices
-	PlayerInputComponent->BindTouch(IE_Pressed, this, &AUeJam2021Character::TouchStarted);
-	PlayerInputComponent->BindTouch(IE_Released, this, &AUeJam2021Character::TouchStopped);
 
-	// VR headset functionality
-	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AUeJam2021Character::OnResetVR);
 }
 
-
-void AUeJam2021Character::OnResetVR()
+void AUeJam2021Character::Tick(float DeltaSeconds)
 {
-	// If UeJam2021 is added to a project via 'Add Feature' in the Unreal Editor the dependency on HeadMountedDisplay in UeJam2021.Build.cs is not automatically propagated
-	// and a linker error will result.
-	// You will need to either:
-	//		Add "HeadMountedDisplay" to [YourProject].Build.cs PublicDependencyModuleNames in order to build successfully (appropriate if supporting VR).
-	// or:
-	//		Comment or delete the call to ResetOrientationAndPosition below (appropriate if not supporting VR)
-	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
+	Super::Tick(DeltaSeconds);
+
+	//UE_LOG(LogTemp, Warning, TEXT("Current Velocity %s"),*GetVelocity().ToString());
+	
 }
 
-void AUeJam2021Character::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
+void AUeJam2021Character::MakeDash()
 {
-		Jump();
+	
+
+	LaunchCharacter(GetActorForwardVector().GetSafeNormal()*1000.f, false, false);
+
 }
 
-void AUeJam2021Character::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location)
-{
-		StopJumping();
-}
 
 void AUeJam2021Character::TurnAtRate(float Rate)
 {
