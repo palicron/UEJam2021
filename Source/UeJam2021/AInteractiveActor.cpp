@@ -38,20 +38,27 @@ void AAInteractiveActor::Tick(float DeltaSeconds)
 
 	if(isGrounded)
 	{
-		MeshComponent->SetLinearDamping(3.5f);
+		//MeshComponent->SetLinearDamping(1.5f);
+	
 	}
 	else
 	{
-		MeshComponent->SetLinearDamping(0.01f);
+		//MeshComponent->SetLinearDamping(0.01f);
+		MeshComponent->AddForce(-GetActorUpVector().GetSafeNormal()*200.f);
+	
 	}
 }
 
 void AAInteractiveActor::OnGrab()
 {
+	//MeshComponent->GetBodyInstance()->bLockXTranslation = false;
+	//MeshComponent->GetBodyInstance()->bLockYTranslation = false;
+	//MeshComponent->GetBodyInstance()->bLockZTranslation = false;
 }
 
 void AAInteractiveActor::OnRealesed()
 {
+
 }
 
 void AAInteractiveActor::OnIntereact()
@@ -60,10 +67,12 @@ void AAInteractiveActor::OnIntereact()
 
 void AAInteractiveActor::OnLaunch()
 {
+	
 }
 
 void AAInteractiveActor::OnFell()
 {
+	
 }
 
 void AAInteractiveActor::OnHold()

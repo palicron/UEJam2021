@@ -66,7 +66,8 @@ void ABlackHole::PullDynamicObjets()
 
 			FVector ForceDir = (  GetActorLocation()- primcomp->GetOwner()->GetActorLocation());
 			ForceDir.Z = 0;
-			
+
+		
 			if(ForceDir.Size()<= eventHorizon)
 			{
 				

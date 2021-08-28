@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "UeJam2021Character.h"
-
+#include "Tile.h"
 #include "DrawDebugHelpers.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
@@ -70,10 +70,13 @@ void AUeJam2021Character::Tick(float DeltaSeconds)
 		CheckForObjets();
 	else
 	{
-		FVector grab = GetActorForwardVector().GetSafeNormal();
-		grab.Z = 0.3;
-		PhysicsHandle->SetTargetLocation(GetActorLocation() + (grab * 150.f));
-		if(FVector::Dist(GetActorLocation(), GrabObject->GetActorLocation())>=200.f)
+		FVector grab = GetActorForwardVector();
+		grab *= 100.f;
+		grab.Z = 150.f;
+		
+		PhysicsHandle->SetTargetLocation(GetActorLocation() + (grab));
+	
+		if(FVector::Dist(GetActorLocation(), GrabObject->GetActorLocation())>=500.f)
 		{
 			PhysicsHandle->ReleaseComponent();
 			GrabObject->OnRealesed();
@@ -175,21 +178,40 @@ void AUeJam2021Character::CheckForObjets()
 {
 	if (isGrounded)
 	{
-		const FVector start = GetActorLocation() + (GetActorForwardVector().GetSafeNormal()*60.f);
-		const FVector end = GetActorLocation() + (GetActorForwardVector().GetSafeNormal() * 60.f);
-
+		 FVector start = GetActorLocation() + (GetActorForwardVector().GetSafeNormal()*50.f);
+		start.Z -= 40.f;
+		 FVector end = GetActorLocation() + (GetActorForwardVector().GetSafeNormal() * 50.f);
+		 end.Z -= 40.f;
 		TArray<AActor*> ActorTOIgnore;
 		ActorTOIgnore.Add(GetOwner());
 
 		FHitResult hitResult;
 
-		const bool hitObject = UKismetSystemLibrary::SphereTraceSingle(GetWorld(), start, end, 50.f, UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel1), false, ActorTOIgnore,
+		const bool hitObject = UKismetSystemLibrary::SphereTraceSingle(GetWorld(), start, end, 30.f, UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel1), false, ActorTOIgnore,
 			EDrawDebugTrace::None,hitResult,true);
 
 		if(hitObject)
 		{
-			TouchObjetct = Cast<AAInteractiveActor>(hitResult.GetActor());
-			OnInteractOnrange(TouchObjetct);
+			FHitResult hit;
+
+			FVector Star = hitResult.GetActor()->GetActorLocation();
+			FVector End = Star + (GetActorUpVector() * 100.f);
+
+			FCollisionQueryParams CollParams;
+			CollParams.AddIgnoredActor(hitResult.GetActor());
+
+			if( !GetWorld()->LineTraceSingleByChannel(hit, Star, End, ECC_Visibility, CollParams))
+			{
+				TouchObjetct = Cast<AAInteractiveActor>(hitResult.GetActor());
+				OnInteractOnrange(TouchObjetct);
+			}
+			else
+			{
+				TouchObjetct = nullptr;
+			}
+	
+			
+			
 		}
 		else
 		{
@@ -202,8 +224,30 @@ void AUeJam2021Character::TryToInteract()
 {
 	if(GrabObject && bIsCarryingSomething)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Soltando"));
-		PhysicsHandle->ReleaseComponent();
+		FHitResult hitH;
+		FCollisionQueryParams CollParams;
+		FVector Star = GetActorLocation() + (GetActorForwardVector() * 150.f);
+		Star.Z += 200.f;
+		bool forntHit = GetWorld()->LineTraceSingleByChannel(hitH, GetActorLocation(), Star, ECC_Visibility, CollParams);
+		if(forntHit)
+		{
+			float distance = (GetActorLocation() - hitH.ImpactPoint).Size();
+			Star = GetActorLocation() + (GetActorForwardVector() *(distance-20.f) );
+		}
+		FHitResult hit;
+		FVector End = Star + (-GetActorUpVector() * 350.f);	
+		CollParams.AddIgnoredActor(GrabObject);
+		if( GetWorld()->LineTraceSingleByChannel(hit, Star, End, ECC_Visibility, CollParams))
+		{
+			
+				FVector place = hit.GetActor()->GetActorLocation();
+				place.Z = hit.ImpactPoint.Z +35.f;
+				PhysicsHandle->ReleaseComponent();
+				GrabObject->SetActorLocation(place);
+			
+		
+		}
+
 		GrabObject->OnRealesed();
 		bIsCarryingSomething = false;
 		TouchObjetct = nullptr;
@@ -211,17 +255,17 @@ void AUeJam2021Character::TryToInteract()
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("tratar de agarrar"));
+	
 		if(TouchObjetct)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("hay un objeto"));
+		
 			UPrimitiveComponent* primitive = Cast<UPrimitiveComponent>(TouchObjetct->GetComponentByClass(UPrimitiveComponent::StaticClass()));
 			if(primitive)
 			{
-				UE_LOG(LogTemp, Warning, TEXT("Agarrando %s"),*TouchObjetct->GetName());
-				PhysicsHandle->GrabComponentAtLocation(primitive, NAME_None, TouchObjetct->GetActorLocation());
 				GrabObject = TouchObjetct;
 				GrabObject->OnGrab();
+				PhysicsHandle->GrabComponentAtLocation(primitive, NAME_None, TouchObjetct->GetActorLocation());
+				
 				bIsCarryingSomething = true;
 				TouchObjetct = nullptr;
 			}
