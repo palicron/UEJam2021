@@ -81,5 +81,10 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Items")
 		void OnInteractOnrange(AAInteractiveActor* inter);
+
+	UFUNCTION(BlueprintCallable)
+		AAInteractiveActor* GetCurrentHeltObjetc();
+	UFUNCTION(BlueprintCallable)
+		void RealseObjetc();
 };
 

@@ -78,11 +78,7 @@ void AUeJam2021Character::Tick(float DeltaSeconds)
 	
 		if(FVector::Dist(GetActorLocation(), GrabObject->GetActorLocation())>=500.f)
 		{
-			PhysicsHandle->ReleaseComponent();
-			GrabObject->OnRealesed();
-			bIsCarryingSomething = false;
-			TouchObjetct = nullptr;
-			GrabObject = nullptr;
+			RealseObjetc();
 		}
 	}
 		
@@ -294,6 +290,20 @@ void AUeJam2021Character::LaunchGrabItem()
 		}
 
 	}
+}
+
+AAInteractiveActor* AUeJam2021Character::GetCurrentHeltObjetc()
+{
+	return GrabObject;
+}
+
+void AUeJam2021Character::RealseObjetc()
+{
+	PhysicsHandle->ReleaseComponent();
+	GrabObject->OnRealesed();
+	bIsCarryingSomething = false;
+	TouchObjetct = nullptr;
+	GrabObject = nullptr;
 }
 
 
