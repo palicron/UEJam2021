@@ -89,19 +89,23 @@ void ABlackHole::PullDynamicObjets()
 			{
 				FVector ForceDir = (GetActorLocation() - primcomp->GetOwner()->GetActorLocation());
 				ForceDir.Z = 0;
-			
+				float finalforce = Forceplayer;
+			    if(!pj->isGrounded)
+			    {
+					finalforce = finalforce / 6;
+			    }
 				if (ForceDir.Size() <= eventHorizon)
 				{
 
-					pj->GetCharacterMovement()->AddImpulse(ForceDir.GetSafeNormal() * (Forceplayer *EventMultiply));
+					pj->GetCharacterMovement()->AddImpulse(ForceDir.GetSafeNormal() * (finalforce *EventMultiply));
 				
 				}
 				else
 				{
 					
 
-					//pj->GetCharacterMovement()->AddForce(ForceDir.GetSafeNormal() * Forceplayer);
-					pj->GetCharacterMovement()->AddImpulse(ForceDir.GetSafeNormal() * Forceplayer);
+					
+					pj->GetCharacterMovement()->AddImpulse(ForceDir.GetSafeNormal() * finalforce);
 				}
 				
 				

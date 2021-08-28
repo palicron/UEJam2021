@@ -243,11 +243,11 @@ void AUeJam2021Character::TryToInteract()
 			
 		
 		}
+	
+			RealseObjetc();
+		
 
-		GrabObject->OnRealesed();
-		bIsCarryingSomething = false;
-		TouchObjetct = nullptr;
-		GrabObject = nullptr;
+		
 	}
 	else
 	{
@@ -304,6 +304,8 @@ void AUeJam2021Character::RealseObjetc()
 	bIsCarryingSomething = false;
 	TouchObjetct = nullptr;
 	GrabObject = nullptr;
+
+	
 }
 
 
