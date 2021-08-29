@@ -3,8 +3,30 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "Engine/DataTable.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "MyBlueprintFunctionLibrary.generated.h"
+
+USTRUCT(BlueprintType)
+struct FLevelList: public FTableRowBase
+{
+    GENERATED_USTRUCT_BODY()
+
+public:
+
+    FLevelList(): LevelName(""), LevelUnlock(false){}
+	;
+
+ 
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Level")
+        FString LevelName;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Level")
+        bool LevelUnlock;
+};
+
 
 /**
  * 

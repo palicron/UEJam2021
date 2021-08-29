@@ -3,6 +3,9 @@
 
 #include "MyBlueprintFunctionLibrary.h"
 
+
+
+
 //Get force to move in DashVelosity in XY plane 
 FVector UMyBlueprintFunctionLibrary::GetLaunchForceHorizontal(FVector direction, FVector Velocity, float HorizontalDistan, float Mass
 	, float DashVelocity,float time)
