@@ -33,6 +33,15 @@ void ATile::GravityEvent()
 	case ETileType::T_Single:
 		Destroy();
 			break;
+	case ETileType::T_Indest:
+		break;
+	case ETileType::T_WhitLife:
+		tileLife--;
+		if(tileLife<=0)
+		{
+			Destroy();
+		}
+		break;
 	}
 }
 

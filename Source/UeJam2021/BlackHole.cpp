@@ -92,7 +92,7 @@ void ABlackHole::PullDynamicObjets()
 				float finalforce = Forceplayer;
 			    if(!pj->isGrounded)
 			    {
-					finalforce = finalforce / 6;
+					finalforce = finalforce / AirForceDivide;
 			    }
 				if (ForceDir.Size() <= eventHorizon)
 				{
@@ -120,6 +120,8 @@ void ABlackHole::PullDynamicObjets()
 void ABlackHole::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
+	LimitSphere->SetSphereRadius(pullRadius);
 	PullDynamicObjets();
 }
 

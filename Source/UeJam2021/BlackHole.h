@@ -61,6 +61,8 @@ public:
 		FVector BoxIncresePerIteration = FVector(200.f);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bh_Porpertes")
 		float intervalesVariance = 1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bh_Porpertes")
+		float AirForceDivide = 6.f;
 	FTimerHandle FlootDentroiTimer;
 
 

@@ -88,19 +88,15 @@ void AUeJam2021Character::Tick(float DeltaSeconds)
 void AUeJam2021Character::MakeDash()
 {
 	//TODO Force depending of velocity
-	if (canDash)
+	if (canDash && isGrounded)
 	{
 		FVector direction = GetActorForwardVector();
 		direction.Z = 0;
 
-		if (isGrounded)
-		{
-			LaunchCharacter(direction.GetSafeNormal() * 1200.f, false, false);
-		}
-		else
-		{
-			LaunchCharacter(direction.GetSafeNormal() * 500.f, false, true);
-		}
+	
+		LaunchCharacter(direction.GetSafeNormal() * 1000.f, false, false);
+	
+		
 		canDash = false;
 		GetWorldTimerManager().SetTimer(DashTime, this, &AUeJam2021Character::ResetDash, DashCd);
 	}
@@ -149,7 +145,7 @@ void AUeJam2021Character::AddPushDownForce()
 {
 	if (!isGrounded && !bIsJumping)
 	{
-		GetCharacterMovement()->AddForce(GetActorUpVector() * -250000.f);
+		GetCharacterMovement()->AddForce(GetActorUpVector() * -350000.f);
 	}
 
 
@@ -283,7 +279,7 @@ void AUeJam2021Character::LaunchGrabItem()
 			UE_LOG(LogTemp, Warning, TEXT("Lanzando"));
 			PhysicsHandle->ReleaseComponent();
 			GrabObject->OnLaunch();
-			GrabObject->LaunchObjet(GetActorForwardVector().GetSafeNormal(), 1500.f);
+			GrabObject->LaunchObjet(GetActorForwardVector().GetSafeNormal(), 450.f);
 			bIsCarryingSomething = false;
 			TouchObjetct = nullptr;
 			GrabObject = nullptr;

@@ -11,7 +11,9 @@ enum class ETileType:uint8
 {
 	T_Single UMETA(DisplayName = "Single"),
 	T_WhitLife UMETA(DisplayName = "Life tile"),
-	T_moving UMETA(DisplayName = "moving tile"),
+	T_Indest UMETA(DisplayName = "Indestructable tile"),
+	T_moving UMETA(DisplayName = "moving tile")
+
 };
 UCLASS()
 class UEJAM2021_API ATile : public AActor
@@ -35,8 +37,11 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "tile config")
 		ETileType type = ETileType::T_Single;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "tile config")
+		int tileLife = 2;
 
 	UFUNCTION(BlueprintCallable)
 		void GravityEvent();
+	
 
 };
