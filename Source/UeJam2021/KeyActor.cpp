@@ -2,6 +2,7 @@
 
 #include "Components/SphereComponent.h"
 #include "Door_Actor.h"
+#include "PowerBank.h"
 #include "KeyActor.h"
 
 AKeyActor::AKeyActor()
@@ -19,15 +20,16 @@ AKeyActor::AKeyActor()
 void AKeyActor::OpenDoor(UPrimitiveComponent* OverlappedComponent, AActor* otherActor, UPrimitiveComponent* OtherComp,
 	int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult)
 {
-	ADoor_Actor* door = Cast<ADoor_Actor>(otherActor);
-	if(door)
+	APowerBank* power = Cast<APowerBank>(otherActor);
+	if(power)
 	{
-		door->OpenDoor(this);
+		power->OpenConnections(this);
 	}
 }
 
 void AKeyActor::DisableAllPhyscis()
 {
 	MeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	OpenSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	MeshComponent->SetSimulatePhysics(false);
 }
