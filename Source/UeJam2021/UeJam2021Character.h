@@ -79,12 +79,20 @@ public:
 	
 	bool bIsCarryingSomething = false;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "Items")
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Items")
 		void OnInteractOnrange(AAInteractiveActor* inter);
+	UFUNCTION(BlueprintImplementableEvent,BlueprintCallable, Category = "Items")
+		void OnRealeseOnrange();
 
 	UFUNCTION(BlueprintCallable)
 		AAInteractiveActor* GetCurrentHeltObjetc();
 	UFUNCTION(BlueprintCallable)
 		void RealseObjetc();
+	UFUNCTION(BlueprintPure)
+		AAInteractiveActor* currentTouchItem() const;
+	UFUNCTION(BlueprintPure)
+		AAInteractiveActor* currentPickItem() const;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Items")
+		FVector spherelocation;
 };
 

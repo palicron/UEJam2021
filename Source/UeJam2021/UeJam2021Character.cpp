@@ -73,11 +73,12 @@ void AUeJam2021Character::Tick(float DeltaSeconds)
 		FVector grab = GetActorForwardVector();
 		grab *= 100.f;
 		grab.Z = 150.f;
-		
-		PhysicsHandle->SetTargetLocation(GetActorLocation() + (grab));
+		spherelocation = GetActorLocation() + grab;
+		PhysicsHandle->SetTargetLocation(spherelocation);
 	
 		if(FVector::Dist(GetActorLocation(), GrabObject->GetActorLocation())>=500.f)
 		{
+			OnRealeseOnrange();
 			RealseObjetc();
 		}
 	}
@@ -195,7 +196,7 @@ void AUeJam2021Character::CheckForObjets()
 			if( !GetWorld()->LineTraceSingleByChannel(hit, Star, End, ECC_Visibility, CollParams))
 			{
 				TouchObjetct = Cast<AAInteractiveActor>(hitResult.GetActor());
-				OnInteractOnrange(TouchObjetct);
+			
 			}
 			else
 			{
@@ -236,13 +237,12 @@ void AUeJam2021Character::TryToInteract()
 				place.Z = hit.ImpactPoint.Z +35.f;
 				PhysicsHandle->ReleaseComponent();
 				GrabObject->SetActorLocation(place);
-			
+				OnRealeseOnrange();
 		
 		}
 	
 			RealseObjetc();
 		
-
 		
 	}
 	else
@@ -257,10 +257,11 @@ void AUeJam2021Character::TryToInteract()
 				GrabObject = TouchObjetct;
 				GrabObject->OnGrab();
 				PhysicsHandle->GrabComponentAtLocation(primitive, NAME_None, TouchObjetct->GetActorLocation());
-				
+				OnInteractOnrange(GrabObject);
 				bIsCarryingSomething = true;
 				TouchObjetct = nullptr;
 			}
+			
 			
 		}
 		else
@@ -276,7 +277,8 @@ void AUeJam2021Character::LaunchGrabItem()
 	{
 		if(GrabObject->bCanBeLaunch)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Lanzando"));
+	
+			OnRealeseOnrange();
 			PhysicsHandle->ReleaseComponent();
 			GrabObject->OnLaunch();
 			GrabObject->LaunchObjet(GetActorForwardVector().GetSafeNormal(), 450.f);
@@ -297,11 +299,22 @@ void AUeJam2021Character::RealseObjetc()
 {
 	PhysicsHandle->ReleaseComponent();
 	GrabObject->OnRealesed();
+	OnRealeseOnrange();
 	bIsCarryingSomething = false;
 	TouchObjetct = nullptr;
 	GrabObject = nullptr;
 
 	
+}
+
+AAInteractiveActor* AUeJam2021Character::currentTouchItem() const
+{
+	return TouchObjetct;
+}
+
+AAInteractiveActor* AUeJam2021Character::currentPickItem() const
+{
+	return GrabObject;
 }
 
 
