@@ -76,7 +76,7 @@ public:
 	bool canDash = true;
 
 	bool bIsJumping = false;
-	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movment Stats")
 	bool bIsCarryingSomething = false;
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Items")
