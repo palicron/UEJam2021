@@ -317,6 +317,31 @@ AAInteractiveActor* AUeJam2021Character::currentPickItem() const
 	return GrabObject;
 }
 
+bool AUeJam2021Character::CanObjetBelauch() const
+{
+	if(GrabObject)
+	{
+		return GrabObject->bCanBeLaunch;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+UTexture2D* AUeJam2021Character::GetCurrentImage() const
+{
+	if(GrabObject)
+	{
+
+		return GrabObject->Icon;
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
 
 void AUeJam2021Character::MoveForward(float Value)
 {

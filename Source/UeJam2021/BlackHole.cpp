@@ -38,8 +38,7 @@ ABlackHole::ABlackHole()
 void ABlackHole::BeginPlay()
 {
 	Super::BeginPlay();
-	DestroyBox->SetBoxExtent(BoxInitStend);
-	GetWorldTimerManager().SetTimer(FlootDentroiTimer, this, &ABlackHole::DestroiTiles, DestroiIntervasle);
+
 	
 }
 
@@ -155,4 +154,18 @@ inline void ABlackHole::DestroiTiles()
 	}
 	
 	
+}
+
+void ABlackHole::StarCounter()
+{
+	DestroyBox->SetBoxExtent(BoxInitStend);
+	GetWorldTimerManager().SetTimer(FlootDentroiTimer, this, &ABlackHole::DestroiTiles, DestroiIntervasle);
+}
+
+void ABlackHole::DestroyLevel()
+{
+	pullRadius=5000.f;
+	Force *= 5;
+	Forceplayer *= 10;
+	OnLevelDestroid();
 }

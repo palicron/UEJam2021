@@ -69,6 +69,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void DestroiTiles();
 
+	UFUNCTION(BlueprintCallable)
+		void StarCounter();
+	
+	UFUNCTION(BlueprintCallable)
+		void DestroyLevel();
+	UFUNCTION(BlueprintImplementableEvent,BlueprintCallable)
+		void OnLevelDestroid();
 	
 	
 

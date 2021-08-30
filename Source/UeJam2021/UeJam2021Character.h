@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "UeJam2021Character.generated.h"
 class AAInteractiveActor;
+class UTexture2D;
 UCLASS(config=Game)
 class AUeJam2021Character : public ACharacter
 {
@@ -92,6 +93,10 @@ public:
 		AAInteractiveActor* currentTouchItem() const;
 	UFUNCTION(BlueprintPure)
 		AAInteractiveActor* currentPickItem() const;
+	UFUNCTION(BlueprintPure)
+		bool CanObjetBelauch() const;
+	UFUNCTION(BlueprintPure)
+		UTexture2D*  GetCurrentImage() const;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Items")
 		FVector spherelocation;
 };

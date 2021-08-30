@@ -34,9 +34,10 @@ protected:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Objet Config")
 		EInter_Type Type = EInter_Type::EI_Grab;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Objet Config")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objet Config")
 		bool bCanBeLaunch = false;
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objet Config")
+		class  UTexture2D* Icon;
 	virtual void Tick(float DeltaSeconds) override;
 	UFUNCTION(BlueprintCallable,Category="Interactive Object")
 	virtual void OnGrab();
