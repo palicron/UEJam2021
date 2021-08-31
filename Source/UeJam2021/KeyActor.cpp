@@ -5,6 +5,9 @@
 #include "PowerBank.h"
 #include "KeyActor.h"
 
+#include "UeJam2021GameMode.h"
+#include "Kismet/GameplayStatics.h"
+
 AKeyActor::AKeyActor()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -17,8 +20,14 @@ AKeyActor::AKeyActor()
 	OpenSphere->OnComponentBeginOverlap.AddDynamic(this, &AKeyActor::OpenDoor);
 }
 
+void AKeyActor::BeginPlay()
+{
+	Super::BeginPlay();
+	StarTransform = GetActorTransform();
+}
+
 void AKeyActor::OpenDoor(UPrimitiveComponent* OverlappedComponent, AActor* otherActor, UPrimitiveComponent* OtherComp,
-	int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult)
+                         int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult)
 {
 	APowerBank* power = Cast<APowerBank>(otherActor);
 	if(power)
@@ -32,4 +41,22 @@ void AKeyActor::DisableAllPhyscis()
 	MeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	OpenSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	MeshComponent->SetSimulatePhysics(false);
+}
+
+void AKeyActor::ResetKey()
+{
+	AGameModeBase* aa = UGameplayStatics::GetGameMode(GetWorld());
+	auto MyMode = (AUeJam2021GameMode*)aa;
+	if (MyMode)
+	{
+		if (MyMode->LevelDestroid)
+		{
+			Destroy();
+		}
+		else
+		{
+			SetActorTransform(StarTransform);
+			GetRootComponent()->ComponentVelocity = FVector::ZeroVector;
+		}
+	}
 }

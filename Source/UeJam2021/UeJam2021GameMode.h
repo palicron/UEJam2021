@@ -16,7 +16,8 @@ public:
 	AUeJam2021GameMode();
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Levels")
 		int32 CurrentLevel = 1;
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Levels")
+		bool LevelDestroid = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Levels")
 		UDataTable* LevelData;
 
@@ -26,6 +27,8 @@ public:
 		void loadNextLevel();
 	UFUNCTION(BlueprintCallable, Category = "Level")
 		void loadSpecificLevel(FString row);
+	UFUNCTION(BlueprintCallable, Category = "Level")
+		void ResetCurrentLevel();
 };
 
 

@@ -25,7 +25,7 @@ protected:
 	/** Called for side to side input */
 	void MoveRight(float Value);
 
-
+	virtual void BeginPlay() override;
 
 protected:
 
@@ -69,6 +69,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Items")
 		class UPhysicsHandleComponent* PhysicsHandle;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Items")
+		FTransform StarTrasform;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movment Stats")
 		float DashMulty = 2.0f;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movment Stats")
@@ -84,7 +86,10 @@ public:
 		void OnInteractOnrange(AAInteractiveActor* inter);
 	UFUNCTION(BlueprintImplementableEvent,BlueprintCallable, Category = "Items")
 		void OnRealeseOnrange();
-
+	
+	UFUNCTION( BlueprintCallable, Category = "Items")
+		void PostionReseter() ;
+	
 	UFUNCTION(BlueprintCallable)
 		AAInteractiveActor* GetCurrentHeltObjetc();
 	UFUNCTION(BlueprintCallable)

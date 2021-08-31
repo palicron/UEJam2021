@@ -40,6 +40,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bh_Porpertes")
+		bool PrincipalBH = true;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bh_Porpertes")
 		float pullRadius = 1000.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bh_Porpertes")
 		float eventHorizon = 350.f;
@@ -63,9 +65,12 @@ public:
 		float intervalesVariance = 1;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bh_Porpertes")
 		float AirForceDivide = 6.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bh_Porpertes")
+		float GlobalTimer = 25.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bh_Porpertes")
 	FTimerHandle FlootDentroiTimer;
-
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Bh_Porpertes")
+	FTimerHandle FGlobalTimer;
 	UFUNCTION(BlueprintCallable)
 		void DestroiTiles();
 

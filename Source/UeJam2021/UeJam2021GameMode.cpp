@@ -51,6 +51,7 @@ void AUeJam2021GameMode::loadNextLevel()
 		name = GetRowLevelName(FString::FromInt(1));
 		UGameplayStatics::OpenLevel(GetWorld(), FName(*name));
 	}
+	LevelDestroid = false;
 	
 }
 
@@ -63,4 +64,16 @@ void AUeJam2021GameMode::loadSpecificLevel(FString row)
 		CurrentLevel = FCString::Atoi(*row);
 		UGameplayStatics::OpenLevel(GetWorld(), FName(*name));
 	}
+	LevelDestroid = false;
+}
+
+void AUeJam2021GameMode::ResetCurrentLevel()
+{
+	FString name = GetRowLevelName(FString::FromInt(CurrentLevel));
+	if (!name.IsEmpty())
+	{
+		
+		UGameplayStatics::OpenLevel(GetWorld(), FName(*name));
+	}
+	LevelDestroid = false;
 }

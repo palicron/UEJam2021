@@ -6,7 +6,13 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "UeJam2021Character.h"
 #include "Tile.h"
+
+#include "UeJam2021GameMode.h"
+#include "Kismet/GameplayStatics.h"
+#include "KeyActor.h"
 #include "BlackHole.h"
+
+
 
 // Sets default values
 ABlackHole::ABlackHole()
@@ -47,7 +53,25 @@ void ABlackHole::OverlapInnerSphere(UPrimitiveComponent* OverlappedComponent, AA
 {
 	if(otherActor)
 	{
-		otherActor->Destroy();
+		AUeJam2021Character* pj = Cast<AUeJam2021Character>(otherActor);
+		if(pj)
+		{
+			pj->PostionReseter();
+		}
+		else
+		{
+			AKeyActor* Akey = Cast<AKeyActor>(otherActor);
+			if(Akey)
+			{
+				Akey->ResetKey();
+			}
+			else
+			{
+				otherActor->Destroy();
+			}
+		
+		}
+		
 	}
 }
 
@@ -160,12 +184,28 @@ void ABlackHole::StarCounter()
 {
 	DestroyBox->SetBoxExtent(BoxInitStend);
 	GetWorldTimerManager().SetTimer(FlootDentroiTimer, this, &ABlackHole::DestroiTiles, DestroiIntervasle);
+	if(PrincipalBH)
+	{
+		GetWorldTimerManager().SetTimer(FGlobalTimer, this, &ABlackHole::DestroyLevel, GlobalTimer);
+	}
+	
 }
 
 void ABlackHole::DestroyLevel()
 {
+	GetWorldTimerManager().ClearAllTimersForObject(this);
 	pullRadius=5000.f;
 	Force *= 5;
 	Forceplayer *= 10;
-	OnLevelDestroid();
+	AGameModeBase* aa = UGameplayStatics::GetGameMode(GetWorld());
+	auto MyMode =(AUeJam2021GameMode*) aa;
+	if(MyMode)
+	{
+		MyMode->LevelDestroid = true;
+	}
+	if(PrincipalBH)
+	{
+		OnLevelDestroid();
+	}
+	
 }

@@ -19,9 +19,14 @@ public:
 		float OpenRaidus = 250.f;
 	// Sets default values for this actor's properties
 	 AKeyActor();
-	
+	 UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+		 FTransform StarTransform;
+	 UFUNCTION(BlueprintCallable)
+		 void ResetKey();
 protected:
 
+	virtual void BeginPlay() override;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 		class USphereComponent* OpenSphere;
 
@@ -30,4 +35,5 @@ protected:
 	
 	UFUNCTION(BlueprintCallable)
 		void DisableAllPhyscis();
+	
 };

@@ -10,6 +10,8 @@
 #include "TimerManager.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "AInteractiveActor.h"
+#include "UeJam2021GameMode.h"
+#include "Kismet/GameplayStatics.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 
 
@@ -290,6 +292,23 @@ void AUeJam2021Character::LaunchGrabItem()
 	}
 }
 
+void AUeJam2021Character::PostionReseter()
+{
+	AGameModeBase* aa = UGameplayStatics::GetGameMode(GetWorld());
+	auto MyMode = (AUeJam2021GameMode*) aa;
+	if (MyMode)
+	{
+		if(MyMode->LevelDestroid)
+		{
+			Destroy();
+		}
+		else
+		{
+			SetActorTransform(StarTrasform);
+		}
+	}
+}
+
 AAInteractiveActor* AUeJam2021Character::GetCurrentHeltObjetc()
 {
 	return GrabObject;
@@ -370,4 +389,10 @@ void AUeJam2021Character::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
+}
+
+void AUeJam2021Character::BeginPlay()
+{
+	Super::BeginPlay();
+	StarTrasform = GetActorTransform();
 }
