@@ -4,6 +4,7 @@
 #include "UeJam2021Character.h"
 #include "Kismet/GameplayStatics.h"
 #include "MyBlueprintFunctionLibrary.h"
+#include "UeJameGameInstance.h"
 #include "UObject/ConstructorHelpers.h"
 
 AUeJam2021GameMode::AUeJam2021GameMode()
@@ -40,8 +41,12 @@ FString AUeJam2021GameMode::GetRowLevelName(FString RowNumber)
 
 void AUeJam2021GameMode::loadNextLevel()
 {
-	CurrentLevel++;
-	FString name = GetRowLevelName(FString::FromInt(CurrentLevel));
+	CurrentLevel += 1;
+	UUeJameGameInstance* intance = Cast<UUeJameGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if(intance)
+	{
+		intance->CurrentLevel++;
+	FString name = GetRowLevelName(FString::FromInt(intance->CurrentLevel));
 	if(!name.IsEmpty())
 	{
 		UGameplayStatics::OpenLevel(GetWorld(), FName(*name));
@@ -52,7 +57,7 @@ void AUeJam2021GameMode::loadNextLevel()
 		UGameplayStatics::OpenLevel(GetWorld(), FName(*name));
 	}
 	LevelDestroid = false;
-	
+	}
 }
 
 void AUeJam2021GameMode::loadSpecificLevel(FString row)
@@ -61,7 +66,12 @@ void AUeJam2021GameMode::loadSpecificLevel(FString row)
 	FString name = GetRowLevelName(row);
 	if (!name.IsEmpty())
 	{
-		CurrentLevel = FCString::Atoi(*row);
+		UUeJameGameInstance* intance = Cast<UUeJameGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+		if (intance)
+		{
+			intance->CurrentLevel= FCString::Atoi(*row);
+
+		}
 		UGameplayStatics::OpenLevel(GetWorld(), FName(*name));
 	}
 	LevelDestroid = false;
@@ -69,11 +79,18 @@ void AUeJam2021GameMode::loadSpecificLevel(FString row)
 
 void AUeJam2021GameMode::ResetCurrentLevel()
 {
-	FString name = GetRowLevelName(FString::FromInt(CurrentLevel));
-	if (!name.IsEmpty())
+
+	UUeJameGameInstance* intance = Cast<UUeJameGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (intance)
 	{
-		
-		UGameplayStatics::OpenLevel(GetWorld(), FName(*name));
+	
+		FString name = GetRowLevelName(FString::FromInt(intance->CurrentLevel));
+		if (!name.IsEmpty())
+		{
+			UGameplayStatics::OpenLevel(GetWorld(), FName(*name));
+		}
+		LevelDestroid = false;
+
 	}
-	LevelDestroid = false;
+
 }
